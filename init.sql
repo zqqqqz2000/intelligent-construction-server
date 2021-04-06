@@ -1,0 +1,1 @@
+CREATE DATABASE intelligent_construction DEFAULT CHARACTER SET utf8;

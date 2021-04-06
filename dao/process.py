@@ -1,7 +1,8 @@
 from global_var import db
+from utils import WithJsonifyModel
 
 
-class Process(db.Model):
+class Process(WithJsonifyModel, db.Model):
     __tablename__ = "process"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pid = db.Column(db.Integer, db.ForeignKey("project.id"), nullable=False)

@@ -1,7 +1,8 @@
 from global_var import db
+from utils import WithJsonifyModel
 
 
-class Notice(db.Model):
+class Notice(WithJsonifyModel, db.Model):
     __tablename__ = "notice"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     msg = db.Column(db.VARCHAR(128), nullable=False)

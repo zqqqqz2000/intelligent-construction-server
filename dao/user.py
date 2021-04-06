@@ -1,7 +1,8 @@
 from global_var import db
+from utils import WithJsonifyModel
 
 
-class User(db.Model):
+class User(WithJsonifyModel, db.Model):
     __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.VARCHAR(20), nullable=False, index=True)
