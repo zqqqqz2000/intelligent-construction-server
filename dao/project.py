@@ -11,3 +11,5 @@ class Project(WithJsonifyModel, db.Model):
     cost = db.Column(db.Integer, nullable=False)
     complete_per = db.Column(db.Integer, nullable=False)
     pic = db.Column(db.Integer, db.ForeignKey("pic.id"), nullable=False)
+    lng = db.Column(db.Float, nullable=False)
+    lat = db.Column(db.Float, nullable=False)

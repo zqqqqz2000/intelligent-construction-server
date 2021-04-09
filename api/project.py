@@ -3,10 +3,35 @@ from typing import Dict, Optional, List
 from flask import Blueprint
 
 from dao.project import Project
+from dao.pu import PU
+from dao.user import User
 from global_var import db
-from utils import json_api
+from utils import json_api, with_token
 
 project = Blueprint("project", __name__, url_prefix="/project")
+
+
+@project.route('/get_project_from_uid', methods=['POST'])
+@json_api
+@with_token()
+def get_project_from_uid(json: Dict, token_data: Dict):
+    role: str = token_data['role']
+    uid: int = token_data['uid']
+    paginate = Project.query.filter(
+        User.id == uid,
+        User.role == role,
+        PU.uid == User.id,
+        PU.pid == Project.id,
+    ).paginate(page=json['page'], per_page=20, error_out=False)
+    result = paginate.items
+    return {
+        'success': True,
+        'data': [
+            p.id for p in result
+        ],
+        'total': paginate.pages,
+        'current': paginate.page
+    }
 
 
 @project.route('/get_project', methods=['POST'])
