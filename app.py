@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import config
+from api.pic import pic
 from api.login import login
 from api.project import project
 from dao.user import User
@@ -38,6 +39,7 @@ with app.app_context():
 def blueprint_init():
     app.register_blueprint(login)
     app.register_blueprint(project)
+    app.register_blueprint(pic)
 
 
 blueprint_init()

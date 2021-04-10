@@ -27,7 +27,7 @@ def get_project_from_uid(json: Dict, token_data: Dict):
     return {
         'success': True,
         'data': [
-            p.id for p in result
+            p.jsonify() for p in result
         ],
         'total': paginate.pages,
         'current': paginate.page
@@ -49,7 +49,7 @@ def get_project(json: Dict):
     return {
         'success': True,
         'data': [
-            p.id for p in result
+            p.jsonify() for p in result
         ],
         'total': paginate.pages,
         'current': paginate.page
@@ -58,22 +58,34 @@ def get_project(json: Dict):
 
 @project.route("/add_project", methods=['POST'])
 @json_api
-def add_project(json: Dict):
+@with_token('investor')
+def add_project(json: Dict, token_data: Dict):
     name: str = json['name']
     describe: str = json['describe']
     cost: int = json['cost']
     scale: int = json['scale']
     pic: int = json['pic']
+    lng: int = json['lng']
+    lat: int = json['lat']
+    uid: int = token_data['uid']
     p: Project = Project(
         name=name,
         describe=describe,
         scale=scale,
         cost=cost,
         complete_per=0,
-        pic=pic
+        pic=pic,
+        lng=lng,
+        lat=lat,
     )
     try:
         db.session.add(p)
+        db.session.commit()
+        pu: PU = PU(
+            pid=p.id,
+            uid=uid
+        )
+        db.session.add(pu)
         db.session.commit()
     except Exception as e:
         return {'success': False, 'info': '图片不存在或项目已存在'}
