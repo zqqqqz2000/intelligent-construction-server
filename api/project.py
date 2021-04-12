@@ -34,6 +34,27 @@ def get_project_from_uid(json: Dict, token_data: Dict):
     }
 
 
+@project.route('/alter_project', methods=['POST'])
+@json_api
+@with_token('investor')
+def alter_project(json: Dict, _: Dict):
+    pid = json['id']
+    project_item: Project = Project.query.filter_by(id=pid).first()
+    project_item.pic = json['pic']
+    project_item.lng = json['lng']
+    project_item.lat = json['lat']
+    project_item.cost = json['cost']
+    project_item.scale = json['scale']
+    project_item.describe = json['describe']
+    project_item.complete_per = json['complete_per']
+    project_item.name = json['name']
+    try:
+        db.session.commit()
+    except Exception as error:
+        return {'success': False, 'info': str(error)}
+    return {'success': True}
+
+
 @project.route('/get_project', methods=['POST'])
 @json_api
 def get_project(json: Dict):

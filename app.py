@@ -31,7 +31,7 @@ with app.app_context():
     from dao.pu import PU as _
     from dao.notice import Notice as _
 
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
     init_account()
 
