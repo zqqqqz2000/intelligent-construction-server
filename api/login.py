@@ -17,3 +17,16 @@ def web_login(json):
             token: bytes = generate_auth_token({'uid': u.id, 'role': u.role})
             return {'success': True, 'info': '登录成功', 'token': token.hex()}
     return {'success': False, 'info': '用户存在或密码错误'}
+
+
+@login.route("/mobil_login", methods=['POST'])
+@json_api
+def mobil_login(json):
+    username: str = json['username']
+    password: str = json['password']
+    u: User = User.query.filter_by(username=username, role='supervisor').first()
+    if u:
+        if check_pwd(password, u.password):
+            token: bytes = generate_auth_token({'uid': u.id, 'role': u.role})
+            return {'success': True, 'info': '登录成功', 'token': token.hex()}
+    return {'success': False, 'info': '用户存在或密码错误'}
