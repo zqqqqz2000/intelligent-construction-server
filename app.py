@@ -20,7 +20,14 @@ def init_account():
         name='小明',
         role='investor'
     )
+    u1 = User(
+        username='admin1',
+        password='21232f297a57a5a743894a0e4a801fc3',
+        name='小方',
+        role='supervisor'
+    )
     db.session.add(u)
+    db.session.add(u1)
     db.session.commit()
 
 
@@ -31,9 +38,9 @@ with app.app_context():
     from dao.pu import PU as _
     from dao.notice import Notice as _
 
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
-    init_account()
+    # init_account()
 
 
 def blueprint_init():

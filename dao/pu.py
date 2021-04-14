@@ -7,3 +7,4 @@ class PU(WithJsonifyModel, db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     pid = db.Column(db.Integer, db.ForeignKey("project.id"), nullable=False)
     uid = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    pu_unique = db.UniqueConstraint("pid", "uid", name="pu_unique")
