@@ -2,6 +2,7 @@ from typing import Dict, Optional, List
 
 from flask import Blueprint
 
+from dao.process import Process
 from dao.project import Project
 from dao.pu import PU
 from dao.user import User
@@ -162,6 +163,23 @@ def remove_project_supervisor(json: Dict, token_data: Dict):
         db.session.delete(pu)
         db.session.commit()
     except Exception as e:
-        print(e)
         return {'success': False, 'info': '监理人不存在'}
+    return {'success': True}
+
+
+@project.route("/add_project_process", methods=['POST'])
+@json_api
+@with_token('supervisor')
+def add_project_process(json: Dict, token_data: Dict):
+    pid = json['pid']
+    comment = json['comment']
+    date = json['date']
+    update_uid = token_data['uid']
+    pic = json['pic']
+    process = Process(pid=pid, comment=comment, date=date, update_uid=update_uid, pic=pic)
+    try:
+        db.session.add(process)
+        db.session.commit()
+    except:
+        return {'success': False, 'info': '进度添加失败，请确保图片上传'}
     return {'success': True}
