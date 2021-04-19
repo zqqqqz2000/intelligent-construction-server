@@ -1,3 +1,4 @@
+import datetime
 from typing import Dict, Optional, List
 
 from flask import Blueprint
@@ -174,12 +175,24 @@ def add_project_process(json: Dict, token_data: Dict):
     pid = json['pid']
     comment = json['comment']
     date = json['date']
+    date_db_type = datetime.datetime.strptime(date.split('.')[0], "%Y-%m-%d %H:%M:%S").date()
     update_uid = token_data['uid']
     pic = json['pic']
-    process = Process(pid=pid, comment=comment, date=date, update_uid=update_uid, pic=pic)
+    process = Process(pid=pid, comment=comment, date=date_db_type, update_uid=update_uid, pic=pic)
     try:
         db.session.add(process)
         db.session.commit()
     except:
         return {'success': False, 'info': '进度添加失败，请确保图片上传'}
     return {'success': True}
+
+
+@project.route("/get_project_process", methods=['POST'])
+@json_api
+@with_token('supervisor')
+def get_project_process(json: Dict, token_data: Dict):
+    pid = json['pid']
+    processes: List[Process] = Process.query.filter_by(
+        pid=pid,
+    ).all()
+    return {'success': True, 'processes': [process.jsonify() for process in processes]}
