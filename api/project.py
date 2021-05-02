@@ -189,7 +189,7 @@ def add_project_process(json: Dict, token_data: Dict):
 
 @project.route("/get_project_process", methods=['POST'])
 @json_api
-@with_token('supervisor')
+@with_token()
 def get_project_process(json: Dict, token_data: Dict):
     pid = json['pid']
     processes: List[Process] = Process.query.filter_by(

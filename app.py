@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 import config
+from api.communicate import communicate
 from api.pic import pic
 from api.login import login
 from api.project import project
@@ -47,6 +48,7 @@ def blueprint_init():
     app.register_blueprint(login)
     app.register_blueprint(project)
     app.register_blueprint(pic)
+    app.register_blueprint(communicate)
 
 
 blueprint_init()
